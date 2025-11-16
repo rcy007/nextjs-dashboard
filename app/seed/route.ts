@@ -2,7 +2,12 @@ import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const allowDevRoutes =
+  process.env.NODE_ENV !== 'production' || process.env.ALLOW_DEV_ROUTES === 'true';
+
+const sql = allowDevRoutes ? postgres(process.env.POSTGRES_URL!, { ssl: 'require' }) : null;
+
+// const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 async function seedUsers(tx: postgres.Sql) {
   await tx`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -102,7 +107,10 @@ async function seedRevenue(tx: postgres.Sql) {
 }
 
 export async function GET() {
+  if (!allowDevRoutes) return new Response(null, { status: 404 });
   try {
+
+    if(sql){
     await sql.begin(async (tx) => {
       await seedUsers(tx);
       await seedCustomers(tx);
@@ -111,6 +119,7 @@ export async function GET() {
     });
 
     return Response.json({ message: 'Database seeded successfully' });
+  }
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
