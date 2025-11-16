@@ -2,6 +2,7 @@ import '@/app/ui/global.css';
 import {inter} from '@/app/ui/fonts';
 // import SideNav from './ui/dashboard/sidenav';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/next';
 
 
 export default function RootLayout({
@@ -15,6 +16,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         {children}
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
