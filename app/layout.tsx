@@ -4,6 +4,17 @@ import {inter} from '@/app/ui/fonts';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Acme Dashboard',
+    default: 'Acme Dashboard',
+  },
+  description: 'The official Next.js Learn Dashboard built with App Router.',
+  metadataBase: new URL('https://nextjs-dashboard-abhinav-ahujas-projects.vercel.app/')
+};
+
 
 export default function RootLayout({
   children,
